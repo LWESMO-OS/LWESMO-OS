@@ -1,203 +1,178 @@
-document.addEventListener('DOMContentLoaded', () => {
-    
-    const preloader = document.getElementById('preloader');
-    const loadBar = document.getElementById('loadBar');
-    const loadPercent = document.getElementById('loadPercent');
-    const loadStatus = document.getElementById('loadStatus');
-    const consoleLines = document.getElementById('consoleLines');
+document.addEventListener('DOMContentLoaded', function() {
+    'use strict';
 
-    const bootMessages = [
-        "Initializing L'WESMOU Kernel...",
-        "Loading Privacy Modules...",
-        "Setting up Offline Environment...",
-        "Checking AES-256 Encryption Keys...",
-        "Mounting Local Storage...",
-        "Verifying System Integrity...",
-        "Starting UI Engine...",
-        "System Ready."
-    ];
+    const SYSTEM_CONFIG = {
+        version: "0.5.2026",
+        developer: "Jamal Mellouki",
+        theme: "Ultra-Matte Black",
+        accent: "#ff6600",
+        selectors: {
+            overlay: '#modalOverlayv5',
+            openBtn: '#triggerPrivacyModal',
+            closeBtn: '#closeModalv5',
+            confirmBtn: '#confirmModalv5',
+            accordions: '.accordion-item-v5',
+            cards: '.access-item-card',
+            body: 'body',
+            status: '.status-dot'
+        }
+    };
 
-    let width = 0;
-    let messageIndex = 0;
+    const UI_ELEMENTS = {
+        overlay: document.querySelector(SYSTEM_CONFIG.selectors.overlay),
+        openBtn: document.querySelector(SYSTEM_CONFIG.selectors.openBtn),
+        closeBtn: document.querySelector(SYSTEM_CONFIG.selectors.closeBtn),
+        confirmBtn: document.querySelector(SYSTEM_CONFIG.selectors.confirmBtn),
+        accordions: document.querySelectorAll(SYSTEM_CONFIG.selectors.accordions),
+        cards: document.querySelectorAll(SYSTEM_CONFIG.selectors.cards),
+        body: document.querySelector(SYSTEM_CONFIG.selectors.body),
+        status: document.querySelector(SYSTEM_CONFIG.selectors.status)
+    };
 
-    const loaderInterval = setInterval(() => {
-        if (width >= 100) {
-            clearInterval(loaderInterval);
-            setTimeout(() => {
-                if(preloader) {
-                    preloader.style.opacity = '0';
-                    setTimeout(() => {
-                        preloader.style.display = 'none';
-                        document.body.classList.add('boot-complete');
-                    }, 800);
+    const MODAL_ENGINE = {
+        init: function() {
+            if (UI_ELEMENTS.openBtn) {
+                UI_ELEMENTS.openBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.launch();
+                });
+            }
+            if (UI_ELEMENTS.closeBtn) {
+                UI_ELEMENTS.closeBtn.addEventListener('click', () => this.terminate());
+            }
+            if (UI_ELEMENTS.confirmBtn) {
+                UI_ELEMENTS.confirmBtn.addEventListener('click', () => this.terminate());
+            }
+            window.addEventListener('click', (e) => {
+                if (e.target === UI_ELEMENTS.overlay) {
+                    this.terminate();
                 }
-            }, 500);
-        } else {
-            width += Math.floor(Math.random() * 5) + 1;
-            if (width > 100) width = 100;
-            if(loadBar) loadBar.style.width = width + '%';
-            if(loadPercent) loadPercent.innerText = width + '%';
-
-            if (width % 15 === 0 && messageIndex < bootMessages.length) {
-                const line = document.createElement('div');
-                line.className = 'console-line';
-                line.innerText = `> ${bootMessages[messageIndex]}`;
-                if(consoleLines) {
-                    consoleLines.appendChild(line);
-                    consoleLines.scrollTop = consoleLines.scrollHeight;
-                }
-                if(loadStatus) loadStatus.innerText = bootMessages[messageIndex];
-                messageIndex++;
-            }
-        }
-    }, 100);
-
-    const canvas = document.getElementById('neonCanvas');
-    if(canvas) {
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * 1 - 0.5;
-                this.color = 'rgba(255, 102, 0, 0.3)';
-            }
-
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0;
-                else if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                else if (this.y < 0) this.y = canvas.height;
-            }
-
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < 80; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
             });
-            requestAnimationFrame(animateParticles);
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    this.terminate();
+                }
+            });
+        },
+        launch: function() {
+            UI_ELEMENTS.overlay.classList.add('active');
+            UI_ELEMENTS.body.style.overflow = 'hidden';
+            UI_ELEMENTS.body.style.paddingRight = '5px';
+        },
+        terminate: function() {
+            UI_ELEMENTS.overlay.classList.remove('active');
+            UI_ELEMENTS.body.style.overflow = '';
+            UI_ELEMENTS.body.style.paddingRight = '';
         }
+    };
 
-        initParticles();
-        animateParticles();
-    }
-
-    function updateClock() {
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        const clockElement = document.getElementById('digitalClock');
-        if (clockElement) {
-            clockElement.innerText = `${hours}:${minutes}:${seconds}`;
+    const ACCORDION_ENGINE = {
+        init: function() {
+            UI_ELEMENTS.accordions.forEach(module => {
+                module.addEventListener('toggle', (e) => {
+                    if (module.open) {
+                        this.closeOthers(module);
+                    }
+                });
+            });
+        },
+        closeOthers: function(currentModule) {
+            UI_ELEMENTS.accordions.forEach(otherModule => {
+                if (otherModule !== currentModule && otherModule.open) {
+                    otherModule.removeAttribute('open');
+                }
+            });
         }
-    }
+    };
 
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    const header = document.getElementById('site-header');
-    const sidebar = document.getElementById('main-sidebar');
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
-    const backToTop = document.getElementById('backToTop');
-
-    window.addEventListener('scroll', () => {
-        if (header) {
-            window.scrollY > 50 ? header.classList.add('header-scrolled') : header.classList.remove('header-scrolled');
-        }
-        if (backToTop) {
-            backToTop.style.display = window.scrollY > 500 ? 'flex' : 'none';
-        }
-    });
-
-    if(sidebarToggle && sidebar) {
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.add('sidebar-open');
-            document.body.style.overflow = 'hidden';
-        });
-    }
-
-    if(sidebarCloseBtn && sidebar) {
-        sidebarCloseBtn.addEventListener('click', () => {
-            sidebar.classList.remove('sidebar-open');
-            document.body.style.overflow = 'auto';
-        });
-    }
-
-    if(backToTop) {
-        backToTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    }
-
-    const privacyOverlay = document.getElementById('privacy-overlay');
-    const privacyOpenBtn = document.getElementById('privacyOpenBtn');
-    const privacyCloseBtn = document.getElementById('privacyCloseBtn');
-    const privacyAcceptBtn = document.getElementById('privacyAcceptBtn');
-
-    if(privacyOpenBtn) {
-        privacyOpenBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            privacyOverlay.classList.add('modal-active');
-            document.body.style.overflow = 'hidden';
-        });
-    }
-
-    [privacyCloseBtn, privacyAcceptBtn].forEach(btn => {
-        btn?.addEventListener('click', () => {
-            privacyOverlay.classList.remove('modal-active');
-            document.body.style.overflow = 'auto';
-        });
-    });
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-active');
+    const INTERACTION_ENGINE = {
+        init: function() {
+            this.applyHoverEffects();
+            this.initSmoothScroll();
+            this.initSystemPulse();
+        },
+        applyHoverEffects: function() {
+            UI_ELEMENTS.cards.forEach(target => {
+                target.addEventListener('mouseenter', () => {
+                    const icon = target.querySelector('.access-item-icon i');
+                    if (icon) {
+                        icon.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                        icon.style.transform = 'scale(1.2) rotate(-8deg)';
+                    }
+                });
+                target.addEventListener('mouseleave', () => {
+                    const icon = target.querySelector('.access-item-icon i');
+                    if (icon) {
+                        icon.style.transform = 'scale(1) rotate(0deg)';
+                    }
+                });
+            });
+        },
+        initSmoothScroll: function() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const destination = document.querySelector(this.getAttribute('href'));
+                    if (destination) {
+                        destination.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        },
+        initSystemPulse: function() {
+            if (UI_ELEMENTS.status) {
+                setInterval(() => {
+                    UI_ELEMENTS.status.style.boxShadow = '0 0 15px #00ff88';
+                    setTimeout(() => {
+                        UI_ELEMENTS.status.style.boxShadow = 'none';
+                    }, 500);
+                }, 3000);
             }
-        });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.animate-v5, .vision-v5-card, .tool-v5-item').forEach(el => {
-        observer.observe(el);
-    });
-
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            sidebar?.classList.remove('sidebar-open');
-            privacyOverlay?.classList.remove('modal-active');
-            document.body.style.overflow = 'auto';
         }
-    });
+    };
+
+    const PERFORMANCE_ENGINE = {
+        init: function() {
+            this.handleViewportLock();
+            window.addEventListener('resize', this.debounce(() => {
+                this.handleViewportLock();
+            }, 250));
+        },
+        handleViewportLock: function() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        },
+        debounce: function(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+    };
+
+    const SYSTEM_BOOT = {
+        run: function() {
+            MODAL_ENGINE.init();
+            ACCORDION_ENGINE.init();
+            INTERACTION_ENGINE.init();
+            PERFORMANCE_ENGINE.init();
+            this.logIdentity();
+        },
+        logIdentity: function() {
+            const style = `color: ${SYSTEM_CONFIG.accent}; font-weight: bold; font-size: 1.2rem;`;
+            console.log("%c[L'WESMO OS INITIALIZED]", style);
+            console.log(`BUILD: ${SYSTEM_CONFIG.version}`);
+            console.log(`DEVELOPER: ${SYSTEM_CONFIG.developer}`);
+        }
+    };
+
+    SYSTEM_BOOT.run();
 });
