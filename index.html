@@ -1,189 +1,136 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>L'WESMOU OS | نظام تشغيل أندرويد المتطور</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background-color: #0a0a0a; color: #ffffff; }
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.5rem; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="min-h-screen selection:bg-orange-500/30">
+<body class="bg-[#0a0a0a] text-white font-sans selection:bg-orange-500/30">
 
     <!-- Header -->
-    <header class="p-6 flex justify-between items-center glass sticky top-0 z-50">
+    <header class="fixed top-0 w-full z-50 p-6 flex justify-between items-center glass border-b border-white/10">
         <div class="flex items-center gap-3">
-            <i data-lucide="cpu" class="w-8 h-8 text-orange-500"></i>
-            <h1 class="text-2xl font-bold text-orange-500">L'WESMOU OS</h1>
+            <div class="p-2 bg-orange-500/10 rounded-xl">
+                <i data-lucide="cpu" class="w-8 h-8 text-orange-500"></i>
+            </div>
+            <h1 class="text-2xl font-bold tracking-tighter">L'WESMOU <span class="text-orange-500">OS</span></h1>
         </div>
-        <button id="sidebarToggle" class="p-2 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition">
-            <i data-lucide="menu"></i>
+        <button id="sidebarToggle" class="p-3 bg-zinc-900 rounded-xl hover:bg-zinc-800 transition-all">
+            <i data-lucide="menu" class="w-6 h-6"></i>
         </button>
     </header>
 
-    <div class="flex relative">
-        <!-- Sidebar -->
-        <aside id="sidebar" class="hidden w-64 h-screen bg-zinc-900 p-6 fixed z-40 shadow-xl">
-            <ul class="space-y-4">
-                <li><a href="#hero" class="flex items-center gap-3 p-2 hover:bg-zinc-800 rounded transition"><i data-lucide="home" class="w-5 h-5"></i> الرئيسية</a></li>
-                <li><a href="#مميزات-النظام" class="flex items-center gap-3 p-2 hover:bg-zinc-800 rounded transition"><i data-lucide="star" class="w-5 h-5"></i> المميزات</a></li>
-                <li><a href="#الأدوات" class="flex items-center gap-3 p-2 hover:bg-zinc-800 rounded transition"><i data-lucide="box" class="w-5 h-5"></i> الأدوات</a></li>
-                <li><a href="#تواصل-معنا" class="flex items-center gap-3 p-2 hover:bg-zinc-800 rounded transition"><i data-lucide="mail" class="w-5 h-5"></i> تواصل معنا</a></li>
-                <li><a href="#الأسئلة-الشائعة" class="flex items-center gap-3 p-2 hover:bg-zinc-800 rounded transition"><i data-lucide="help-circle" class="w-5 h-5"></i> الأسئلة الشائعة</a></li>
-                <li><a href="#المطور" class="flex items-center gap-3 p-2 hover:bg-zinc-800 rounded transition"><i data-lucide="user" class="w-5 h-5"></i> المطور</a></li>
-                <li><a href="#خارطة-الطريق" class="flex items-center gap-3 p-2 hover:bg-zinc-800 rounded transition"><i data-lucide="map" class="w-5 h-5"></i> خارطة الطريق</a></li>
-            </ul>
-        </aside>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed top-24 right-0 w-72 h-[calc(100vh-6rem)] bg-zinc-950/95 backdrop-blur-xl border-l border-white/10 p-8 z-40 hidden shadow-2xl">
+        <ul class="space-y-6">
+            <li><a href="#hero" class="flex items-center gap-4 text-lg hover:text-orange-500 transition-colors"><i data-lucide="home" class="w-6 h-6"></i> الرئيسية</a></li>
+            <li><a href="#مميزات-النظام" class="flex items-center gap-4 text-lg hover:text-orange-500 transition-colors"><i data-lucide="star" class="w-6 h-6"></i> المميزات</a></li>
+            <li><a href="#الأدوات" class="flex items-center gap-4 text-lg hover:text-orange-500 transition-colors"><i data-lucide="box" class="w-6 h-6"></i> الأدوات</a></li>
+            <li><a href="#تواصل-معنا" class="flex items-center gap-4 text-lg hover:text-orange-500 transition-colors"><i data-lucide="mail" class="w-6 h-6"></i> تواصل معنا</a></li>
+            <li><a href="#الأسئلة-الشائعة" class="flex items-center gap-4 text-lg hover:text-orange-500 transition-colors"><i data-lucide="help-circle" class="w-6 h-6"></i> الأسئلة الشائعة</a></li>
+        </ul>
+    </aside>
 
-        <!-- Main Content -->
-        <main class="flex-1 p-6 md:p-12 space-y-20">
-            <section id="hero" class="text-center py-20">
-                <div class="mb-8 flex justify-center">
-                    <div class="p-6 bg-zinc-900 rounded-3xl border border-orange-500/20">
-                        <i data-lucide="cpu" class="w-20 h-20 text-orange-500"></i>
-                    </div>
+    <!-- Main Content -->
+    <main class="pt-32 p-6 md:p-12 space-y-32">
+        <!-- Hero Section -->
+        <section id="hero" class="text-center">
+            <div class="mb-10 inline-block p-8 bg-zinc-900 rounded-3xl border border-orange-500/20 shadow-2xl shadow-orange-500/10">
+                <i data-lucide="cpu" class="w-24 h-24 text-orange-500"></i>
+            </div>
+            <h2 class="text-6xl md:text-8xl font-bold mb-8 tracking-tighter">L'WESMOU <span class="text-orange-500">OS</span></h2>
+            <p class="text-zinc-400 text-2xl max-w-2xl mx-auto">نظام تشغيل متطور لأجهزة أندرويد، يجمع بين القوة، الخصوصية، والتصميم العصري.</p>
+        </section>
+
+        <!-- Features Section -->
+        <section id="مميزات-النظام" class="space-y-12">
+            <h3 class="text-5xl font-bold tracking-tighter">لماذا L'WESMOU OS؟</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all"><i data-lucide="shield" class="w-12 h-12 text-orange-500 mb-6"></i><h4 class="font-bold text-xl mb-2">خصوصية مطلقة</h4><p class="text-zinc-400">معالجة محلية 100% لبياناتك</p></div>
+                <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all"><i data-lucide="zap" class="w-12 h-12 text-orange-500 mb-6"></i><h4 class="font-bold text-xl mb-2">سرعة فائقة</h4><p class="text-zinc-400">تحسينات أداء عميقة للنظام</p></div>
+                <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all"><i data-lucide="layout" class="w-12 h-12 text-orange-500 mb-6"></i><h4 class="font-bold text-xl mb-2">تصميم أنيق</h4><p class="text-zinc-400">واجهة عصرية وسلسة جداً</p></div>
+                <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all"><i data-lucide="refresh-cw" class="w-12 h-12 text-orange-500 mb-6"></i><h4 class="font-bold text-xl mb-2">تحديثات مستمرة</h4><p class="text-zinc-400">دعم فني وتطوير دائم</p></div>
+            </div>
+        </section>
+
+        <!-- Tools Section -->
+        <section id="الأدوات" class="space-y-12">
+            <h3 class="text-5xl font-bold tracking-tighter">الأدوات المدمجة</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all shadow-xl">
+                    <span class="font-bold text-xl block mb-4">مدير التحميلات</span>
+                    <p class="text-zinc-400 leading-relaxed">حمل محتواك المفضل من أي مكان بجودة تصل إلى 4K مع خيارات تخصيص كاملة.</p>
                 </div>
-                <h2 class="text-5xl font-bold mb-6">L'WESMOU OS</h2>
-                <p class="text-zinc-400 text-xl">نظام تشغيل متطور لأجهزة أندرويد.</p>
-            </section>
-
-            <section id="مميزات-النظام" class="space-y-8">
-                <h3 class="text-4xl font-bold tracking-tight">لماذا L'WESMOU OS؟</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="bg-zinc-900/50 p-6 rounded-2xl border border-white/5 hover:border-orange-500/20 transition-all"><i data-lucide="shield" class="w-8 h-8 text-orange-500 mb-4"></i><h4 class="font-bold text-lg">خصوصية مطلقة</h4><p class="text-zinc-400 mt-2">معالجة محلية 100% لبياناتك</p></div>
-                    <div class="bg-zinc-900/50 p-6 rounded-2xl border border-white/5 hover:border-orange-500/20 transition-all"><i data-lucide="zap" class="w-8 h-8 text-orange-500 mb-4"></i><h4 class="font-bold text-lg">سرعة فائقة</h4><p class="text-zinc-400 mt-2">تحسينات أداء عميقة للنظام</p></div>
-                    <div class="bg-zinc-900/50 p-6 rounded-2xl border border-white/5 hover:border-orange-500/20 transition-all"><i data-lucide="layout" class="w-8 h-8 text-orange-500 mb-4"></i><h4 class="font-bold text-lg">تصميم أنيق</h4><p class="text-zinc-400 mt-2">واجهة عصرية وسلسة جداً</p></div>
-                    <div class="bg-zinc-900/50 p-6 rounded-2xl border border-white/5 hover:border-orange-500/20 transition-all"><i data-lucide="refresh-cw" class="w-8 h-8 text-orange-500 mb-4"></i><h4 class="font-bold text-lg">تحديثات مستمرة</h4><p class="text-zinc-400 mt-2">دعم فني وتطوير دائم</p></div>
+                <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all shadow-xl">
+                    <span class="font-bold text-xl block mb-4">مستكشف الملفات</span>
+                    <p class="text-zinc-400 leading-relaxed">أداتك الشاملة لإدارة ملفاتك: دمج، ترجمة، ضغط، وقفل ملفاتك بذكاء.</p>
                 </div>
-            </section>
-
-            <section id="الأدوات" class="space-y-8">
-                <h3 class="text-4xl font-bold tracking-tight">الأدوات المدمجة</h3>
-                <div id="toolsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-            </section>
-
-            <section id="تواصل-معنا" class="space-y-8">
-                <h3 class="text-4xl font-bold tracking-tight">رسائل عاجلة وإعلانات</h3>
-                <div class="bg-gradient-to-r from-zinc-900 to-zinc-950 p-8 rounded-3xl border border-white/5 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
-                    <p class="text-zinc-400 text-lg">للرسائل العاجلة أو استفسارات الإعلانات، يرجى التواصل معنا عبر Gmail.</p>
-                    <a href="mailto:lwesmo.os@gmail.com" class="inline-flex items-center gap-2 bg-white text-zinc-950 px-8 py-4 rounded-2xl font-semibold hover:bg-zinc-200 transition-colors">التواصل عبر Gmail</a>
+                <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all shadow-xl">
+                    <span class="font-bold text-xl block mb-4">محرر الوسائط</span>
+                    <p class="text-zinc-400 leading-relaxed">ارفع جودة صورك وفيديوهاتك، أزل الضوضاء، وأضف لمسات احترافية.</p>
                 </div>
-            </section>
-
-            <section id="الأسئلة-الشائعة" class="space-y-8">
-                <h3 class="text-4xl font-bold tracking-tight">الأسئلة الشائعة</h3>
-                <div id="faqContainer" class="space-y-4"></div>
-            </section>
-
-            <section id="المطور" class="space-y-8">
-                <h3 class="text-4xl font-bold tracking-tight">المطور</h3>
-                <div class="bg-zinc-900/50 p-10 rounded-3xl border border-white/5 shadow-2xl">
-                    <h4 class="font-bold text-3xl text-white">ملوكي جمال</h4>
-                    <p class="text-orange-500 mt-1 font-medium">مطور L'WESMOU OS</p>
-                    <div class="flex gap-6 mt-8">
-                        <a href="https://t.me/MLk_JAMAL" target="_blank"><i data-lucide="send" class="w-6 h-6 hover:text-orange-500"></i></a>
-                        <a href="https://www.tiktok.com/@mellouki_djamal" target="_blank"><i data-lucide="music" class="w-6 h-6 hover:text-orange-500"></i></a>
-                        <a href="https://instagram.com/mellouki_djamal" target="_blank"><i data-lucide="instagram" class="w-6 h-6 hover:text-orange-500"></i></a>
-                        <a href="https://wa.me/213776243941" target="_blank"><i data-lucide="message-circle" class="w-6 h-6 hover:text-orange-500"></i></a>
-                    </div>
+                <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all shadow-xl">
+                    <span class="font-bold text-xl block mb-4">مدير المهام</span>
+                    <p class="text-zinc-400 leading-relaxed">نظم وقتك، أضف تذكيرات، وأجل مهامك بمرونة تامة.</p>
                 </div>
-            </section>
-
-            <section id="خارطة-الطريق" class="space-y-8">
-                <h3 class="text-4xl font-bold tracking-tight">خارطة الطريق المستقبلية</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5"><h4 class="font-bold text-xl text-orange-500">المرحلة الأولى</h4><ul class="mt-4 space-y-2 text-zinc-400"><li>• دعم اللغات العالمية</li><li>• تحسين واجهة المستخدم</li></ul></div>
-                    <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5"><h4 class="font-bold text-xl text-orange-500">المرحلة الثانية</h4><ul class="mt-4 space-y-2 text-zinc-400"><li>• مزامنة سحابية اختيارية</li><li>• دعم الأجهزة اللوحية</li></ul></div>
-                    <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5"><h4 class="font-bold text-xl text-orange-500">المرحلة الثالثة</h4><ul class="mt-4 space-y-2 text-zinc-400"><li>• تكامل مع خدمات الطرف الثالث</li><li>• نظام إضافات (Plugins)</li></ul></div>
-                    <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5"><h4 class="font-bold text-xl text-orange-500">المرحلة الرابعة</h4><ul class="mt-4 space-y-2 text-zinc-400"><li>• إصدار خاص لأجهزة الحاسوب</li><li>• دعم الذكاء الاصطناعي التوليدي</li></ul></div>
+                <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all shadow-xl">
+                    <span class="font-bold text-xl block mb-4">الخزنة</span>
+                    <p class="text-zinc-400 leading-relaxed">احمِ خصوصيتك واحفظ ملفاتك الخاصة في مكان مشفر بعيداً عن الأعين.</p>
                 </div>
-            </section>
-        </main>
-    </div>
+            </div>
+        </section>
 
-    <footer class="p-10 text-center border-t border-white/5">
-        <button id="openPrivacy" class="text-zinc-500 hover:text-orange-500">سياسة الخصوصية</button>
-        <span class="mx-4 text-zinc-700">|</span>
-        <button id="openTerms" class="text-zinc-500 hover:text-orange-500">شروط الاستخدام</button>
+        <!-- FAQ Section (21 Items) -->
+        <section id="الأسئلة-الشائعة" class="space-y-12">
+            <h3 class="text-5xl font-bold tracking-tighter">الأسئلة الشائعة</h3>
+            <div class="space-y-4">
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">1. ما هو L'WESMOU OS؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">هو نظام إنتاجية متكامل مصمم لأجهزة أندرويد، يركز على الخصوصية والكفاءة.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">2. هل التطبيق مجاني؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">نعم، التطبيق متاح مجاناً، مع وجود إعلانات لدعم تطويره.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">3. هل يحتوي التطبيق على إعلانات؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">نعم، يحتوي التطبيق على إعلانات لدعم استمرارية التطوير وتوفير الميزات.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">4. هل تؤثر الإعلانات على تجربة الاستخدام؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">لا، تم تصميم الإعلانات بعناية لتكون غير مزعجة ولا تؤثر على تجربة الاستخدام.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">5. هل يحتاج التطبيق إلى إنترنت؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">نعم، بعض الأدوات تحتاج للإنترنت، بينما تعمل الأدوات الأساسية الأخرى دون الحاجة إليه.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">6. هل تعمل جميع الأدوات بدون إنترنت؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">لا، بعض الأدوات المتقدمة تتطلب اتصالاً بالإنترنت، لكن الأدوات الأساسية تعمل محلياً.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">7. هل بياناتي آمنة؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">نعم، خصوصيتك هي أولويتنا، حيث يتم تنفيذ معظم العمليات محلياً على جهازك.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">8. كيف أقوم بتحميل الملفات؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">يمكنك تحميل الملفات بسهولة عبر أداة مدير التحميلات باستخدام الروابط أو البحث الذكي.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">9. هل يدعم التطبيق ملفات PDF؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">نعم، يمكنك تعديل، دمج، وترجمة ملفات PDF بكل سهولة.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">10. هل يمكنني زيادة جودة الفيديوهات؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">نعم، يوفر محرر الوسائط أدوات احترافية لرفع جودة الصور والفيديوهات.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">11. كيف أضيف تذكيراً لمهامي؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">عبر أداة مدير المهام، يمكنك إضافة تذكيرات ذكية وتأجيل المهام.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">12. أين تُحفظ الملفات الخاصة؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">تُحفظ في "الخزنة" المشفرة داخل أعماق النظام، بعيداً عن أي وصول خارجي.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">13. هل التطبيق يدعم اللغة العربية؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">نعم، التطبيق يدعم اللغة العربية بالكامل لسهولة الاستخدام.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">14. هل يمكنني إزالة العلامة المائية؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">نعم، يوفر محرر الوسائط أدوات لإزالة العلامات المائية والضوضاء من الصور والفيديوهات.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">15. هل التطبيق يستهلك البطارية؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">التطبيق مصمم ليكون خفيفاً جداً ولا يستهلك البطارية بشكل غير مبرر.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">16. هل يمكنني تأجيل المهام؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">نعم، يمكنك تأجيل المهام غير المحققة بمرونة عالية لتنظيم وقتك بشكل أفضل.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">17. هل يمكنني فك قفل ملفات Word؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">نعم، يتيح لك مستكشف الملفات قفل وفك قفل ملفات Word و Excel.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">18. هل يدعم التطبيق فلاتر الصوت؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">نعم، يمكنك إضافة فلاتر احترافية للصوت عبر محرر الوسائط.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">19. هل يتم تخزين الصور في السحابة؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">لا، يتم تخزين الصور والملفات محلياً على جهازك لضمان خصوصيتك.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">20. كيف أتواصل مع المطور؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">يمكنك التواصل معنا عبر روابط التواصل الاجتماعي المتاحة في قسم المطور.</div></div>
+                <div class="bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden"><button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors">21. هل التطبيق متوافق مع جميع إصدارات أندرويد؟</button><div class="faq-answer px-6 pb-6 text-zinc-400 hidden">نعم، تم تصميم التطبيق ليكون متوافقاً مع معظم إصدارات أندرويد الحديثة.</div></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="p-12 text-center border-t border-white/10 mt-20">
+        <div class="flex justify-center gap-8 mb-6">
+            <button id="openPrivacy" class="text-zinc-500 hover:text-orange-500 transition-colors">سياسة الخصوصية</button>
+            <button id="openTerms" class="text-zinc-500 hover:text-orange-500 transition-colors">شروط الاستخدام</button>
+        </div>
+        <p class="text-zinc-700">© 2026 L'WESMOU OS. جميع الحقوق محفوظة.</p>
     </footer>
 
-    <div id="modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
-        <div class="bg-zinc-900 p-10 rounded-3xl border border-white/5 max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl">
-            <h2 id="modalTitle" class="text-3xl font-bold mb-8 text-white"></h2>
-            <div id="modalContent" class="space-y-6 text-zinc-300 leading-relaxed"></div>
-            <button id="closeModal" class="mt-10 w-full bg-orange-500 text-white px-8 py-4 rounded-2xl font-semibold hover:bg-orange-600 transition-colors">إغلاق</button>
+    <!-- Modals -->
+    <div id="modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl hidden">
+        <div class="bg-zinc-900 p-12 rounded-3xl border border-white/10 max-w-3xl w-full max-h-[85vh] overflow-y-auto shadow-2xl">
+            <h2 id="modalTitle" class="text-4xl font-bold mb-10 text-white"></h2>
+            <div id="modalContent" class="space-y-6 text-zinc-300 text-lg leading-relaxed"></div>
+            <button id="closeModal" class="mt-12 w-full bg-orange-500 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-orange-600 transition-all">إغلاق</button>
         </div>
     </div>
 
-    <button id="scrollTop" class="fixed bottom-8 left-8 p-4 bg-orange-500 text-white rounded-full shadow-lg z-50 hidden hover:bg-orange-600 transition">↑</button>
-
-    <script>
-        const tools = [
-            { name: 'مدير التحميلات', desc: 'حمل محتواك المفضل من أي مكان بجودة تصل إلى 4K مع خيارات تخصيص كاملة.' },
-            { name: 'مستكشف الملفات', desc: 'أداتك الشاملة لإدارة ملفاتك: دمج، ترجمة، ضغط، وقفل ملفاتك بذكاء.' },
-            { name: 'محرر الوسائط', desc: 'ارفع جودة صورك وفيديوهاتك، أزل الضوضاء، وأضف لمسات احترافية.' },
-            { name: 'مدير المهام', desc: 'نظم وقتك، أضف تذكيرات، وأجل مهامك بمرونة تامة.' },
-            { name: 'الخزنة', desc: 'احمِ خصوصيتك واحفظ ملفاتك الخاصة في مكان مشفر بعيداً عن الأعين.' },
-        ];
-        const faqs = [
-            { q: 'ما هو L\'WESMOU OS؟', a: 'هو نظام إنتاجية متكامل مصمم لأجهزة أندرويد، يركز على الخصوصية والكفاءة.' },
-            { q: 'هل التطبيق مجاني؟', a: 'نعم، التطبيق متاح مجاناً، مع وجود إعلانات لدعم تطويره.' },
-            { q: 'هل يحتوي التطبيق على إعلانات؟', a: 'نعم، يحتوي التطبيق على إعلانات لدعم استمرارية التطوير وتوفير الميزات.' },
-            { q: 'هل تؤثر الإعلانات على تجربة الاستخدام؟', a: 'لا، تم تصميم الإعلانات بعناية لتكون غير مزعجة ولا تؤثر على تجربة الاستخدام.' },
-            { q: 'هل يحتاج التطبيق إلى إنترنت؟', a: 'نعم، بعض الأدوات تحتاج للإنترنت، بينما تعمل الأدوات الأساسية الأخرى دون الحاجة إليه.' },
-            { q: 'هل تعمل جميع الأدوات بدون إنترنت؟', a: 'لا، بعض الأدوات المتقدمة تتطلب اتصالاً بالإنترنت، لكن الأدوات الأساسية تعمل محلياً.' },
-            { q: 'هل بياناتي آمنة؟', a: 'نعم، خصوصيتك هي أولويتنا، حيث يتم تنفيذ معظم العمليات محلياً على جهازك.' },
-            { q: 'كيف أقوم بتحميل الملفات؟', a: 'يمكنك تحميل الملفات بسهولة عبر أداة مدير التحميلات باستخدام الروابط أو البحث الذكي.' },
-            { q: 'هل يدعم التطبيق ملفات PDF؟', a: 'نعم، يمكنك تعديل، دمج، وترجمة ملفات PDF بكل سهولة.' },
-            { q: 'هل يمكنني زيادة جودة الفيديوهات؟', a: 'نعم، يوفر محرر الوسائط أدوات احترافية لرفع جودة الصور والفيديوهات.' },
-            { q: 'كيف أضيف تذكيراً لمهامي؟', a: 'عبر أداة مدير المهام، يمكنك إضافة تذكيرات ذكية وتأجيل المهام.' },
-            { q: 'أين تُحفظ الملفات الخاصة؟', a: 'تُحفظ في "الخزنة" المشفرة داخل أعماق النظام، بعيداً عن أي وصول خارجي.' },
-            { q: 'هل التطبيق يدعم اللغة العربية؟', a: 'نعم، التطبيق يدعم اللغة العربية بالكامل لسهولة الاستخدام.' },
-            { q: 'هل يمكنني إزالة العلامة المائية؟', a: 'نعم، يوفر محرر الوسائط أدوات لإزالة العلامات المائية والضوضاء من الصور والفيديوهات.' },
-            { q: 'هل التطبيق يستهلك البطارية؟', a: 'التطبيق مصمم ليكون خفيفاً جداً ولا يستهلك البطارية بشكل غير مبرر.' },
-            { q: 'هل يمكنني تأجيل المهام؟', a: 'نعم، يمكنك تأجيل المهام غير المحققة بمرونة عالية لتنظيم وقتك بشكل أفضل.' },
-            { q: 'هل يمكنني فك قفل ملفات Word؟', a: 'نعم، يتيح لك مستكشف الملفات قفل وفك قفل ملفات Word و Excel.' },
-            { q: 'هل يدعم التطبيق فلاتر الصوت؟', a: 'نعم، يمكنك إضافة فلاتر احترافية للصوت عبر محرر الوسائط.' },
-            { q: 'هل يتم تخزين الصور في السحابة؟', a: 'لا، يتم تخزين الصور والملفات محلياً على جهازك لضمان خصوصيتك.' },
-            { q: 'كيف أتواصل مع المطور؟', a: 'يمكنك التواصل معنا عبر روابط التواصل الاجتماعي المتاحة في قسم المطور.' },
-            { q: 'هل التطبيق متوافق مع جميع إصدارات أندرويد؟', a: 'نعم، تم تصميم التطبيق ليكون متوافقاً مع معظم إصدارات أندرويد الحديثة.' }
-        ];
-        const privacyPolicy = ["1. جمع البيانات: نلتزم بجمع الحد الأدنى من البيانات الضرورية فقط لضمان عمل التطبيق.", "2. معالجة البيانات: تتم معالجة معظم البيانات محلياً على جهاز المستخدم لضمان الخصوصية.", "3. مشاركة البيانات: لا نقوم ببيع أو مشاركة بياناتك الشخصية مع أطراف ثالثة.", "4. أمن البيانات: نستخدم تقنيات تشفير متقدمة لحماية ملفاتك في 'الخزنة'.", "5. حقوق المستخدم: يحق لك الوصول إلى بياناتك أو طلب حذفها في أي وقت.", "6. الإعلانات: نستخدم إعلانات غير مزعجة لدعم التطوير، ولا نجمع بيانات تتبع حساسة.", "7. روابط الطرف الثالث: لا نتحمل مسؤولية محتوى المواقع الخارجية التي قد تظهر في الإعلانات.", "8. خصوصية الأطفال: التطبيق غير مخصص للأطفال دون سن 13 عاماً.", "9. تحديثات السياسة: قد نقوم بتحديث هذه السياسة، وسيتم إخطارك بأي تغييرات جوهرية.", "10. اتصل بنا: يمكنك التواصل معنا عبر البريد الإلكتروني لأي استفسار."];
-        const termsOfUse = ["1. قبول الشروط: باستخدامك للتطبيق، أنت توافق على هذه الشروط بالكامل.", "2. الترخيص: نمنحك ترخيصاً محدوداً وغير حصري لاستخدام التطبيق.", "3. سلوك المستخدم: يمنع استخدام التطبيق لأي أغراض غير قانونية أو ضارة.", "4. الملكية الفكرية: جميع الحقوق الفكرية للتطبيق محفوظة للمطور.", "5. إخلاء المسؤولية: التطبيق مقدم 'كما هو' دون أي ضمانات صريحة أو ضمنية.", "6. تحديد المسؤولية: لا نتحمل مسؤولية أي أضرار ناتجة عن استخدام التطبيق.", "7. إنهاء الخدمة: نحتفظ بالحق في إنهاء وصولك للتطبيق في حال مخالفة الشروط.", "8. القانون الحاكم: تخضع هذه الشروط للقوانين المعمول بها في بلد المطور.", "9. تعديل الشروط: يحق لنا تعديل هذه الشروط، واستمرارك في استخدام التطبيق يعني موافقتك.", "10. معلومات الاتصال: لأي استفسارات قانونية، يرجى التواصل معنا عبر البريد الإلكتروني."];
-
-        const toolsGrid = document.getElementById('toolsGrid');
-        tools.forEach(tool => { toolsGrid.innerHTML += `<div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all shadow-xl flex flex-col gap-6"><span class="font-bold text-xl">${tool.name}</span><p class="text-zinc-400 leading-relaxed">${tool.desc}</p></div>`; });
-
-        const faqContainer = document.getElementById('faqContainer');
-        faqs.forEach((faq, index) => {
-            const div = document.createElement('div');
-            div.className = "bg-zinc-900/50 rounded-2xl border border-white/5 overflow-hidden";
-            div.innerHTML = `<button class="faq-toggle w-full p-6 text-right font-semibold text-lg hover:bg-white/5 transition-colors flex justify-between items-center">${index + 1}. ${faq.q} <span>▼</span></button><div class="faq-answer px-6 pb-6 text-zinc-400 leading-relaxed hidden">${faq.a}</div>`;
-            div.querySelector('.faq-toggle').addEventListener('click', function() { this.nextElementSibling.classList.toggle('hidden'); });
-            faqContainer.appendChild(div);
-        });
-
-        const modal = document.getElementById('modal');
-        function openModal(title, contentArray) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalContent').innerHTML = contentArray.map(item => `<p>${item}</p>`).join('');
-            modal.classList.remove('hidden');
-        }
-        document.getElementById('openPrivacy').addEventListener('click', () => openModal('سياسة الخصوصية', privacyPolicy));
-        document.getElementById('openTerms').addEventListener('click', () => openModal('شروط الاستخدام', termsOfUse));
-        document.getElementById('closeModal').addEventListener('click', () => modal.classList.add('hidden'));
-
-        document.getElementById('sidebarToggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('hidden'));
-        window.addEventListener('scroll', () => {
-            const btn = document.getElementById('scrollTop');
-            window.scrollY > 300 ? btn.classList.remove('hidden') : btn.classList.add('hidden');
-        });
-        document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}));
-        lucide.createIcons();
-    </script>
+    <script src="script.js"></script>
+    <script>lucide.createIcons();</script>
 </body>
 </html>
