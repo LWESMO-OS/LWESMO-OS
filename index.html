@@ -8,17 +8,45 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background-color: #0a0a0a; color: #ffffff; }
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.5rem; }
-        .faq-answer { display: none; }
-        .faq-answer.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        
+        body { 
+            font-family: 'Tajawal', sans-serif; 
+            background-color: #0a0a0a; 
+            color: #ffffff; 
+        }
+        
+        .glass { 
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 1.5rem; 
+        }
+        
+        .faq-answer { 
+            display: none; 
+        }
+        
+        .faq-answer.active { 
+            display: block; 
+        }
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        .animate-fade-in { 
+            animation: fadeIn 0.8s ease-out forwards; 
+        }
     </style>
 </head>
 <body class="selection:bg-orange-500/30">
 
-    <!-- Header Section -->
+    <!-- 
+        ================================================================
+        Header Section
+        ================================================================
+    -->
     <header class="fixed top-0 w-full z-50 p-6 flex justify-between items-center glass border-b border-white/10">
         <div class="flex items-center gap-3">
             <div class="p-2 bg-orange-500/10 rounded-xl">
@@ -31,7 +59,11 @@
         </button>
     </header>
 
-    <!-- Sidebar Section -->
+    <!-- 
+        ================================================================
+        Sidebar Section
+        ================================================================
+    -->
     <aside id="sidebar" class="fixed top-24 right-0 w-72 h-[calc(100vh-6rem)] bg-zinc-950/95 backdrop-blur-xl border-l border-white/10 p-8 z-40 hidden shadow-2xl">
         <ul class="space-y-6">
             <li><a href="#hero" class="flex items-center gap-4 text-lg hover:text-orange-500 transition-colors"><i data-lucide="home" class="w-6 h-6"></i> الرئيسية</a></li>
@@ -45,7 +77,11 @@
 
     <main class="pt-32 p-6 md:p-12 space-y-32">
         
-        <!-- Hero Section -->
+        <!-- 
+            ================================================================
+            Hero Section
+            ================================================================
+        -->
         <section id="hero" class="text-center animate-fade-in">
             <div class="mb-10 inline-block p-8 bg-zinc-900 rounded-3xl border border-orange-500/20 shadow-2xl shadow-orange-500/10">
                 <i data-lucide="cpu" class="w-24 h-24 text-orange-500"></i>
@@ -54,7 +90,26 @@
             <p class="text-zinc-400 text-2xl max-w-2xl mx-auto">نظام تشغيل متطور لأجهزة أندرويد، يجمع بين القوة، الخصوصية، والتصميم العصري.</p>
         </section>
 
-        <!-- Tools Section (Explicitly Written) -->
+        <!-- 
+            ================================================================
+            Features Section
+            ================================================================
+        -->
+        <section id="مميزات-النظام" class="space-y-12">
+            <h3 class="text-5xl font-bold tracking-tighter">لماذا L'WESMOU OS؟</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all"><i data-lucide="shield" class="w-12 h-12 text-orange-500 mb-6"></i><h4 class="font-bold text-xl mb-2">خصوصية مطلقة</h4><p class="text-zinc-400">معالجة محلية 100% لبياناتك</p></div>
+                <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all"><i data-lucide="zap" class="w-12 h-12 text-orange-500 mb-6"></i><h4 class="font-bold text-xl mb-2">سرعة فائقة</h4><p class="text-zinc-400">تحسينات أداء عميقة للنظام</p></div>
+                <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all"><i data-lucide="layout" class="w-12 h-12 text-orange-500 mb-6"></i><h4 class="font-bold text-xl mb-2">تصميم أنيق</h4><p class="text-zinc-400">واجهة عصرية وسلسة جداً</p></div>
+                <div class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all"><i data-lucide="refresh-cw" class="w-12 h-12 text-orange-500 mb-6"></i><h4 class="font-bold text-xl mb-2">تحديثات مستمرة</h4><p class="text-zinc-400">دعم فني وتطوير دائم</p></div>
+            </div>
+        </section>
+
+        <!-- 
+            ================================================================
+            Tools Section
+            ================================================================
+        -->
         <section id="الأدوات" class="space-y-12">
             <h3 class="text-5xl font-bold tracking-tighter">الأدوات المدمجة</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -81,7 +136,11 @@
             </div>
         </section>
 
-        <!-- FAQ Section (21 items explicitly written) -->
+        <!-- 
+            ================================================================
+            FAQ Section (21 items explicitly written)
+            ================================================================
+        -->
         <section id="الأسئلة-الشائعة" class="space-y-12">
             <h3 class="text-5xl font-bold tracking-tighter">الأسئلة الشائعة</h3>
             <div class="space-y-4">
@@ -109,7 +168,11 @@
             </div>
         </section>
 
-        <!-- Developer Section (Explicitly Written) -->
+        <!-- 
+            ================================================================
+            Developer Section
+            ================================================================
+        -->
         <section id="المطور" class="space-y-12">
             <h3 class="text-5xl font-bold tracking-tighter">المطور</h3>
             <div class="bg-zinc-900/50 p-12 rounded-3xl border border-white/5 shadow-2xl">
@@ -125,7 +188,11 @@
         </section>
     </main>
 
-    <!-- Footer -->
+    <!-- 
+        ================================================================
+        Footer Section
+        ================================================================
+    -->
     <footer class="p-12 text-center border-t border-white/10 mt-20">
         <div class="flex justify-center gap-8 mb-6">
             <button id="openPrivacy" class="text-zinc-500 hover:text-orange-500 transition-colors">سياسة الخصوصية</button>
@@ -134,7 +201,11 @@
         <p class="text-zinc-700">© 2026 L'WESMOU OS. جميع الحقوق محفوظة.</p>
     </footer>
 
-    <!-- Modals -->
+    <!-- 
+        ================================================================
+        Modals Section (Privacy & Terms - 10 items each)
+        ================================================================
+    -->
     <div id="modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl hidden">
         <div class="bg-zinc-900 p-12 rounded-3xl border border-white/10 max-w-3xl w-full max-h-[85vh] overflow-y-auto shadow-2xl">
             <h2 id="modalTitle" class="text-4xl font-bold mb-10 text-white"></h2>
@@ -148,44 +219,8 @@
         <i data-lucide="arrow-up" class="w-6 h-6"></i>
     </button>
 
-    <!-- Explicit JavaScript logic -->
-    <script>
-        // FAQ Toggle logic
-        document.querySelectorAll('.faq-toggle').forEach(button => {
-            button.addEventListener('click', () => {
-                button.nextElementSibling.classList.toggle('hidden');
-            });
-        });
-
-        // Modal Logic
-        const modal = document.getElementById('modal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalContent = document.getElementById('modalContent');
-        
-        const privacyPolicy = ["1. جمع البيانات: نلتزم بجمع الحد الأدنى من البيانات الضرورية فقط لضمان عمل التطبيق.", "2. معالجة البيانات: تتم معالجة معظم البيانات محلياً على جهاز المستخدم لضمان الخصوصية.", "3. مشاركة البيانات: لا نقوم ببيع أو مشاركة بياناتك الشخصية مع أطراف ثالثة.", "4. أمن البيانات: نستخدم تقنيات تشفير متقدمة لحماية ملفاتك في 'الخزنة'.", "5. حقوق المستخدم: يحق لك الوصول إلى بياناتك أو طلب حذفها في أي وقت.", "6. الإعلانات: نستخدم إعلانات غير مزعجة لدعم التطوير، ولا نجمع بيانات تتبع حساسة.", "7. روابط الطرف الثالث: لا نتحمل مسؤولية محتوى المواقع الخارجية التي قد تظهر في الإعلانات.", "8. خصوصية الأطفال: التطبيق غير مخصص للأطفال دون سن 13 عاماً.", "9. تحديثات السياسة: قد نقوم بتحديث هذه السياسة، وسيتم إخطارك بأي تغييرات جوهرية.", "10. اتصل بنا: يمكنك التواصل معنا عبر البريد الإلكتروني لأي استفسار."];
-        const termsOfUse = ["1. قبول الشروط: باستخدامك للتطبيق، أنت توافق على هذه الشروط بالكامل.", "2. الترخيص: نمنحك ترخيصاً محدوداً وغير حصري لاستخدام التطبيق.", "3. سلوك المستخدم: يمنع استخدام التطبيق لأي أغراض غير قانونية أو ضارة.", "4. الملكية الفكرية: جميع الحقوق الفكرية للتطبيق محفوظة للمطور.", "5. إخلاء المسؤولية: التطبيق مقدم 'كما هو' دون أي ضمانات صريحة أو ضمنية.", "6. تحديد المسؤولية: لا نتحمل مسؤولية أي أضرار ناتجة عن استخدام التطبيق.", "7. إنهاء الخدمة: نحتفظ بالحق في إنهاء وصولك للتطبيق في حال مخالفة الشروط.", "8. القانون الحاكم: تخضع هذه الشروط للقوانين المعمول بها في بلد المطور.", "9. تعديل الشروط: يحق لنا تعديل هذه الشروط، واستمرارك في استخدام التطبيق يعني موافقتك.", "10. معلومات الاتصال: لأي استفسارات قانونية، يرجى التواصل معنا عبر البريد الإلكتروني."];
-
-        document.getElementById('openPrivacy').addEventListener('click', () => {
-            modalTitle.innerText = 'سياسة الخصوصية';
-            modalContent.innerHTML = privacyPolicy.map(item => `<p>${item}</p>`).join('');
-            modal.classList.remove('hidden');
-        });
-        document.getElementById('openTerms').addEventListener('click', () => {
-            modalTitle.innerText = 'شروط الاستخدام';
-            modalContent.innerHTML = termsOfUse.map(item => `<p>${item}</p>`).join('');
-            modal.classList.remove('hidden');
-        });
-        document.getElementById('closeModal').addEventListener('click', () => modal.classList.add('hidden'));
-
-        // Sidebar & ScrollTop
-        document.getElementById('sidebarToggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('hidden'));
-        window.addEventListener('scroll', () => {
-            const btn = document.getElementById('scrollTop');
-            window.scrollY > 300 ? btn.classList.remove('hidden') : btn.classList.add('hidden');
-        });
-        document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}));
-        
-        lucide.createIcons();
-    </script>
-</body>
-</html>
+    <!-- 
+        ================================================================
+        JavaScript Logic
+        ================================================================
+    -->
