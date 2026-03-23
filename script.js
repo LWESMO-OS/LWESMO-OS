@@ -1,472 +1,328 @@
-const LWESMOU_CORE = (function() {
-    'use strict';
+document.addEventListener('DOMContentLoaded', () => {
+    
+    const preloader = document.getElementById('preloader');
+    const loadBar = document.getElementById('loadBar');
+    const loadPercent = document.getElementById('loadPercent');
+    const loadStatus = document.getElementById('loadStatus');
+    const consoleLines = document.getElementById('consoleLines');
 
-    const UI_STATE = {
-        isSidebarOpen: false,
-        isModalOpen: false,
-        lastScrollPos: 0,
-        isLoading: true,
-        activeTheme: 'matte-black',
-        particlesEnabled: true
-    };
+    const bootMessages = [
+        "Initializing L'WESMOU Kernel...",
+        "Loading Privacy Modules...",
+        "Setting up Offline Environment...",
+        "Checking AES-256 Encryption Keys...",
+        "Mounting Local Storage...",
+        "Verifying System Integrity...",
+        "Starting UI Engine...",
+        "System Ready."
+    ];
 
-    const DOM_ELEMENTS = {
-        body: document.body,
-        header: document.getElementById('site-header'),
-        preloader: document.getElementById('preloader'),
-        loadBar: document.getElementById('loadBar'),
-        sidebar: document.getElementById('main-sidebar'),
-        sidebarToggle: document.getElementById('sidebarToggle'),
-        sidebarClose: document.getElementById('sidebarCloseBtn'),
-        neonCanvas: document.getElementById('neonCanvas'),
-        privacyModal: document.getElementById('privacy-overlay'),
-        privacyOpen: document.getElementById('privacyOpenBtn'),
-        privacyClose: document.getElementById('privacyCloseBtn'),
-        privacyAccept: document.getElementById('privacyAcceptBtn'),
-        backToTop: document.getElementById('backToTop'),
-        faqItems: document.querySelectorAll('.faq-item-v3')
-    };
+    let width = 0;
+    let messageIndex = 0;
+
+    const loaderInterval = setInterval(() => {
+        if (width >= 100) {
+            clearInterval(loaderInterval);
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                    document.body.classList.add('boot-complete');
+                }, 800);
+            }, 500);
+        } else {
+            width += Math.floor(Math.random() * 5) + 1;
+            if (width > 100) width = 100;
+            loadBar.style.width = width + '%';
+            loadPercent.innerText = width + '%';
+
+            if (width % 15 === 0 && messageIndex < bootMessages.length) {
+                const line = document.createElement('div');
+                line.className = 'console-line';
+                line.innerText = `> ${bootMessages[messageIndex]}`;
+                consoleLines.appendChild(line);
+                consoleLines.scrollTop = consoleLines.scrollHeight;
+                loadStatus.innerText = bootMessages[messageIndex];
+                messageIndex++;
+            }
+        }
+    }, 100);
+
+    const canvas = document.getElementById('neonCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
     class Particle {
-        constructor(canvasWidth, canvasHeight) {
-            this.canvasWidth = canvasWidth;
-            this.canvasHeight = canvasHeight;
-            this.init();
-        }
-
-        init() {
-            this.x = Math.random() * this.canvasWidth;
-            this.y = Math.random() * this.canvasHeight;
-            this.size = Math.random() * 2 + 1;
-            this.speedX = Math.random() * 1.5 - 0.75;
-            this.speedY = Math.random() * 1.5 - 0.75;
-            this.color = '#ff6600';
-            this.opacity = Math.random() * 0.5 + 0.1;
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 0.5;
+            this.speedX = Math.random() * 1 - 0.5;
+            this.speedY = Math.random() * 1 - 0.5;
+            this.color = 'rgba(255, 102, 0, 0.3)';
         }
 
         update() {
             this.x += this.speedX;
             this.y += this.speedY;
 
-            if (this.x > this.canvasWidth) this.x = 0;
-            else if (this.x < 0) this.x = this.canvasWidth;
-            
-            if (this.y > this.canvasHeight) this.y = 0;
-            else if (this.y < 0) this.y = this.canvasHeight;
+            if (this.x > canvas.width) this.x = 0;
+            else if (this.x < 0) this.x = canvas.width;
+            if (this.y > canvas.height) this.y = 0;
+            else if (this.y < 0) this.y = canvas.height;
         }
 
-        draw(ctx) {
+        draw() {
+            ctx.fillStyle = this.color;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 102, 0, ${this.opacity})`;
             ctx.fill();
         }
     }
 
-    class NeonBackground {
-        constructor(canvasId) {
-            this.canvas = canvasId;
-            if (!this.canvas) return;
-            this.ctx = this.canvas.getContext('2d');
-            this.particles = [];
-            this.numberOfParticles = 80;
-            this.resize();
-            this.createParticles();
-            this.animate();
-            window.addEventListener('resize', () => this.resize());
-        }
-
-        resize() {
-            this.canvas.width = window.innerWidth;
-            this.canvas.height = window.innerHeight;
-        }
-
-        createParticles() {
-            for (let i = 0; i < this.numberOfParticles; i++) {
-                this.particles.push(new Particle(this.canvas.width, this.canvas.height));
-            }
-        }
-
-        animate() {
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.particles.forEach(particle => {
-                particle.update();
-                particle.draw(this.ctx);
-            });
-            this.connectParticles();
-            requestAnimationFrame(() => this.animate());
-        }
-
-        connectParticles() {
-            const maxDistance = 150;
-            for (let a = 0; a < this.particles.length; a++) {
-                for (let b = a; b < this.particles.length; b++) {
-                    const dx = this.particles[a].x - this.particles[b].x;
-                    const dy = this.particles[a].y - this.particles[b].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < maxDistance) {
-                        const opacity = 1 - (distance / maxDistance);
-                        this.ctx.strokeStyle = `rgba(255, 102, 0, ${opacity * 0.2})`;
-                        this.ctx.lineWidth = 1;
-                        this.ctx.beginPath();
-                        this.ctx.moveTo(this.particles[a].x, this.particles[a].y);
-                        this.ctx.lineTo(this.particles[b].x, this.particles[b].y);
-                        this.ctx.stroke();
-                    }
-                }
-            }
+    function initParticles() {
+        particles = [];
+        for (let i = 0; i < 80; i++) {
+            particles.push(new Particle());
         }
     }
 
-    const AnimationEngine = {
-        initLoader() {
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += Math.random() * 15;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
-                    this.hideLoader();
-                }
-                if (DOM_ELEMENTS.loadBar) {
-                    DOM_ELEMENTS.loadBar.style.width = progress + '%';
-                }
-            }, 150);
-        },
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        requestAnimationFrame(animateParticles);
+    }
 
-        hideLoader() {
-            if (DOM_ELEMENTS.preloader) {
-                DOM_ELEMENTS.preloader.style.opacity = '0';
-                setTimeout(() => {
-                    DOM_ELEMENTS.preloader.style.display = 'none';
-                    UI_STATE.isLoading = false;
-                    this.revealContent();
-                }, 600);
-            }
-        },
+    initParticles();
+    animateParticles();
 
-        revealContent() {
-            const revealItems = document.querySelectorAll('.animate-pop, .vision-card-premium, .tool-item-large');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('revealed');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.15 });
-
-            revealItems.forEach(item => observer.observe(item));
+    function updateClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const clockElement = document.getElementById('digitalClock');
+        if (clockElement) {
+            clockElement.innerText = `${hours}:${minutes}:${seconds}`;
         }
-    };
+    }
 
-    const NavigationManager = {
-        toggleSidebar() {
-            UI_STATE.isSidebarOpen = !UI_STATE.isSidebarOpen;
-            if (UI_STATE.isSidebarOpen) {
-                DOM_ELEMENTS.sidebar.classList.add('sidebar-open');
-                DOM_ELEMENTS.sidebar.classList.remove('sidebar-closed');
-                DOM_ELEMENTS.body.style.overflow = 'hidden';
-            } else {
-                DOM_ELEMENTS.sidebar.classList.remove('sidebar-open');
-                DOM_ELEMENTS.sidebar.classList.add('sidebar-closed');
-                DOM_ELEMENTS.body.style.overflow = 'auto';
-            }
-        },
+    setInterval(updateClock, 1000);
+    updateClock();
 
-        handleScroll() {
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll > 100) {
-                DOM_ELEMENTS.header.classList.add('header-scrolled');
-                DOM_ELEMENTS.backToTop.classList.add('show');
-            } else {
-                DOM_ELEMENTS.header.classList.remove('header-scrolled');
-                DOM_ELEMENTS.backToTop.classList.remove('show');
-            }
+});
+    const header = document.getElementById('site-header');
+    const sidebar = document.getElementById('main-sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+    const backToTop = document.getElementById('backToTop');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section');
 
-            if (currentScroll > UI_STATE.lastScrollPos && currentScroll > 200) {
-                DOM_ELEMENTS.header.style.transform = 'translateY(-100%)';
-            } else {
-                DOM_ELEMENTS.header.style.transform = 'translateY(0)';
-            }
-            
-            UI_STATE.lastScrollPos = currentScroll;
-            this.updateActiveLink();
-        },
-
-        updateActiveLink() {
-            const sections = document.querySelectorAll('section');
-            const navItems = document.querySelectorAll('.nav-item');
-            
-            let currentActive = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (window.pageYOffset >= (sectionTop - 150)) {
-                    currentActive = section.getAttribute('id');
-                }
-            });
-
-            navItems.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').includes(currentActive)) {
-                    link.classList.add('active');
-                }
-            });
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('header-scrolled');
+        } else {
+            header.classList.remove('header-scrolled');
         }
-    };
-       const ModalManager = {
-        openPrivacyModal(e) {
-            if (e) e.preventDefault();
-            UI_STATE.isModalOpen = true;
-            DOM_ELEMENTS.privacyModal.style.display = 'flex';
-            DOM_ELEMENTS.body.style.overflow = 'hidden';
-            setTimeout(() => {
-                DOM_ELEMENTS.privacyModal.classList.add('modal-visible');
-            }, 10);
-        },
 
-        closePrivacyModal() {
-            UI_STATE.isModalOpen = false;
-            DOM_ELEMENTS.privacyModal.classList.remove('modal-visible');
-            setTimeout(() => {
-                DOM_ELEMENTS.privacyModal.style.display = 'none';
-                if (!UI_STATE.isSidebarOpen) {
-                    DOM_ELEMENTS.body.style.overflow = 'auto';
-                }
-            }, 400);
-        },
-
-        handleOverlayClick(e) {
-            if (e.target === DOM_ELEMENTS.privacyModal) {
-                this.closePrivacyModal();
-            }
+        if (window.scrollY > 500) {
+            backToTop.style.display = 'flex';
+        } else {
+            backToTop.style.display = 'none';
         }
-    };
 
-    const InteractionEngine = {
-        initFaq() {
-            DOM_ELEMENTS.faqItems.forEach(item => {
-                const header = item.querySelector('.faq-header-v3');
-                header.addEventListener('click', () => {
-                    const isOpen = item.classList.contains('faq-open');
-                    this.closeAllFaq();
-                    if (!isOpen) {
-                        item.classList.add('faq-open');
-                        const icon = item.querySelector('i');
-                        icon.style.transform = 'rotate(180deg)';
-                    }
-                });
-            });
-        },
-
-        closeAllFaq() {
-            DOM_ELEMENTS.faqItems.forEach(item => {
-                item.classList.remove('faq-open');
-                const icon = item.querySelector('i');
-                if (icon) icon.style.transform = 'rotate(0deg)';
-            });
-        },
-
-        initSmoothScroll() {
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-                    
-                    e.preventDefault();
-                    const targetElement = document.querySelector(targetId);
-                    
-                    if (targetElement) {
-                        if (UI_STATE.isSidebarOpen) {
-                            NavigationManager.toggleSidebar();
-                        }
-
-                        const headerOffset = 80;
-                        const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                        window.scrollTo({
-                            top: offsetPosition,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-        },
-
-        initBackToTop() {
-            DOM_ELEMENTS.backToTop.addEventListener('click', () => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-        }
-    };
-
-    const ToolModule = {
-        initToolHover() {
-            const tools = document.querySelectorAll('.tool-item-large');
-            tools.forEach(tool => {
-                tool.addEventListener('mouseenter', () => {
-                    tool.querySelector('.tool-icon-circle').classList.add('tool-pulse');
-                });
-                tool.addEventListener('mouseleave', () => {
-                    tool.querySelector('.tool-icon-circle').classList.remove('tool-pulse');
-                });
-            });
-        },
-
-        updateStatsDynamically() {
-            const stats = document.querySelectorAll('.stat-num');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        this.animateNumber(entry.target);
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 1 });
-
-            stats.forEach(stat => observer.observe(stat));
-        },
-
-        animateNumber(element) {
-            const target = parseInt(element.innerText.replace('+', '').replace('%', ''));
-            const suffix = element.innerText.includes('+') ? '+' : (element.innerText.includes('%') ? '%' : '');
-            let count = 0;
-            const speed = 2000 / target;
-
-            const updateCount = () => {
-                if (count < target) {
-                    count++;
-                    element.innerText = count + suffix;
-                    setTimeout(updateCount, speed);
-                } else {
-                    element.innerText = target + suffix;
-                }
-            };
-            updateCount();
-        }
-    };
-
-    const FormHandler = {
-        initNewsletter() {
-            const form = document.querySelector('.footer-form');
-            if (form) {
-                form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const input = form.querySelector('input');
-                    if (this.validateEmail(input.value)) {
-                        this.showFeedback(form, 'تم الاشتراك بنجاح!', 'success');
-                        input.value = '';
-                    } else {
-                        this.showFeedback(form, 'البريد غير صالح', 'error');
-                    }
-                });
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+                current = section.getAttribute('id');
             }
-        },
+        });
 
-        validateEmail(email) {
-            return String(email)
-                .toLowerCase()
-                .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-        },
-
-        showFeedback(parent, message, type) {
-            const feedback = document.createElement('div');
-            feedback.className = `form-feedback ${type}`;
-            feedback.innerText = message;
-            parent.appendChild(feedback);
-            setTimeout(() => feedback.remove(), 3000);
-        }
-    };
-
-    const CoreInitializer = {
-        bindEvents() {
-            DOM_ELEMENTS.sidebarToggle.addEventListener('click', () => NavigationManager.toggleSidebar());
-            DOM_ELEMENTS.sidebarClose.addEventListener('click', () => NavigationManager.toggleSidebar());
-            window.addEventListener('scroll', () => NavigationManager.handleScroll());
-            
-            if (DOM_ELEMENTS.privacyOpen) {
-                DOM_ELEMENTS.privacyOpen.addEventListener('click', (e) => ModalManager.openPrivacyModal(e));
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('active');
             }
-            if (DOM_ELEMENTS.privacyClose) {
-                DOM_ELEMENTS.privacyClose.addEventListener('click', () => ModalManager.closePrivacyModal());
-            }
-            if (DOM_ELEMENTS.privacyAccept) {
-                DOM_ELEMENTS.privacyAccept.addEventListener('click', () => ModalManager.closePrivacyModal());
-            }
-            if (DOM_ELEMENTS.privacyModal) {
-                DOM_ELEMENTS.privacyModal.addEventListener('click', (e) => ModalManager.handleOverlayClick(e));
-            }
-
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    if (UI_STATE.isSidebarOpen) NavigationManager.toggleSidebar();
-                    if (UI_STATE.isModalOpen) ModalManager.closePrivacyModal();
-                }
-            });
-        },
-
-        initAll() {
-            AnimationEngine.initLoader();
-            this.bindEvents();
-            InteractionEngine.initFaq();
-            InteractionEngine.initSmoothScroll();
-            InteractionEngine.initBackToTop();
-            ToolModule.initToolHover();
-            ToolModule.updateStatsDynamically();
-            FormHandler.initNewsletter();
-            
-            if (DOM_ELEMENTS.neonCanvas) {
-                new NeonBackground(DOM_ELEMENTS.neonCanvas);
-            }
-
-            console.log("L'WESMOU OS Core v0.4 Loaded Successfully.");
-        }
-    };
-
-    document.addEventListener('DOMContentLoaded', () => {
-        CoreInitializer.initAll();
+        });
     });
 
-    return {
-        toggleSidebar: NavigationManager.toggleSidebar,
-        openPrivacy: ModalManager.openPrivacyModal
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.add('sidebar-open');
+        document.body.style.overflow = 'hidden';
+    });
+
+    const closeSidebar = () => {
+        sidebar.classList.remove('sidebar-open');
+        document.body.style.overflow = 'auto';
     };
 
-})();
-.footer-v4-list, .footer-v4-list ul {
-    list-style: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
+    sidebarCloseBtn.addEventListener('click', closeSidebar);
+    
+    document.querySelector('.sidebar-v5-overlay')?.addEventListener('click', closeSidebar);
 
-.footer-v4-list li a {
-    color: var(--text-gray) !important;
-    display: block;
-    padding: 5px 0;
-}
+    document.querySelectorAll('.side-nav-link').forEach(link => {
+        link.addEventListener('click', closeSidebar);
+    });
 
-#backToTop {
-    left: 20px !important;
-    right: auto !important;
-    bottom: 25px !important;
-}
+    backToTop.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
 
-@media (max-width: 768px) {
-    .footer-v4-grid {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 30px !important;
-        text-align: center;
+    const faqItems = document.querySelectorAll('.faq-v5-item');
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-v5-question');
+        question.addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+            
+            faqItems.forEach(i => i.classList.remove('active'));
+            
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        });
+    });
+
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-active');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.animate-v5, .vision-v5-card, .tool-v5-item').forEach(el => {
+        observer.observe(el);
+    });
+    const privacyOverlay = document.getElementById('privacy-overlay');
+    const privacyOpenBtn = document.getElementById('privacyOpenBtn');
+    const privacyCloseBtn = document.getElementById('privacyCloseBtn');
+    const privacyAcceptBtn = document.getElementById('privacyAcceptBtn');
+
+    const openModal = (modal) => {
+        if (!modal) return;
+        modal.classList.add('modal-active');
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeModal = (modal) => {
+        if (!modal) return;
+        modal.classList.remove('modal-active');
+        document.body.style.overflow = 'auto';
+    };
+
+    privacyOpenBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal(privacyOverlay);
+    });
+
+    privacyCloseBtn?.addEventListener('click', () => closeModal(privacyOverlay));
+    privacyAcceptBtn?.addEventListener('click', () => closeModal(privacyOverlay));
+
+    window.addEventListener('click', (e) => {
+        if (e.target === privacyOverlay) {
+            closeModal(privacyOverlay);
+        }
+    });
+
+    const typeWriter = (selector, text, speed = 50) => {
+        const element = document.querySelector(selector);
+        if (!element) return;
+        
+        let i = 0;
+        element.innerHTML = '';
+        
+        const timer = setInterval(() => {
+            if (i < text.length) {
+                element.append(text.charAt(i));
+                i++;
+            } else {
+                clearInterval(timer);
+            }
+        }, speed);
+    };
+
+    const heroSubtitle = document.querySelector('.v5-subtitle');
+    if (heroSubtitle) {
+        const originalText = heroSubtitle.innerText;
+        typeWriter('.v5-subtitle', originalText, 100);
     }
-    .footer-v4-col {
-        width: 100% !important;
-        margin-bottom: 20px;
-    }
-}
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                const headerOffset = 100;
+                const elementPosition = targetElement.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    console.log("%c L'WESMOU OS v0.5 ", "background: #ff6600; color: #fff; font-size: 20px; font-weight: bold;");
+    console.log("%c Developed by Jamal Mellouki ", "color: #ff6600; font-weight: bold;");
+
+    const handleNetworkChange = () => {
+        const statusIndicator = document.querySelector('.status-indicator');
+        const statusText = document.querySelector('.footer-v5-status');
+        
+        if (navigator.onLine) {
+            if (statusIndicator) statusIndicator.style.background = '#4CAF50';
+            if (statusText) statusText.innerHTML = '<span class="status-indicator" style="background:#4CAF50"></span> النظام متصل ومستقر';
+        } else {
+            if (statusIndicator) statusIndicator.style.background = '#ffc107';
+            if (statusText) statusText.innerHTML = '<span class="status-indicator" style="background:#ffc107"></span> يعمل في وضع الأوفلاين الآمن';
+        }
+    };
+
+    window.addEventListener('online', handleNetworkChange);
+    window.addEventListener('offline', handleNetworkChange);
+    handleNetworkChange();
+
+    document.querySelectorAll('.tool-v5-item').forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            const visual = item.querySelector('.tool-v5-visual');
+            if (visual) visual.style.transform = 'scale(1.02) translateY(-5px)';
+        });
+        item.addEventListener('mouseleave', () => {
+            const visual = item.querySelector('.tool-v5-visual');
+            if (visual) visual.style.transform = 'scale(1) translateY(0)';
+        });
+    });
+
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeModal(privacyOverlay);
+            closeSidebar();
+        }
+    });
+
+
